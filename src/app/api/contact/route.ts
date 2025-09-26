@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY?.trim())
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -15,6 +13,16 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Check if Resend API key is configured
+    const apiKey = process.env.RESEND_API_KEY?.trim()
+    if (!apiKey) {
+      console.log("Contact form submission:", { name, email, company, message })
+      return NextResponse.json({ success: true, message: "Form submission logged" })
+    }
+
+    // Initialize Resend with API key
+    const resend = new Resend(apiKey)
 
     // Send simple notification email to you
     await resend.emails.send({
