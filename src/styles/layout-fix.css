@@ -1,0 +1,95 @@
+/* Layout Shift Prevention Styles */
+
+/* 1. Isolate sections with containment */
+.alternating-features-section {
+  position: relative;
+  contain: layout paint;
+  isolation: isolate;
+  overflow: clip;
+}
+
+/* 2. Fixed height containers */
+.features-container {
+  position: relative;
+  min-height: 800px;
+  contain: layout;
+  will-change: contents;
+}
+
+/* 3. Animation layer isolation */
+.feature-card-wrapper {
+  will-change: transform, opacity;
+}
+
+/* 4. Expanded content - no layout shift */
+.feature-expanded-content {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  will-change: opacity;
+}
+
+.feature-expanded-content.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.feature-expanded-content.is-visible {
+  visibility: visible;
+  opacity: 1;
+  max-height: 2000px;
+}
+
+/* 5. Prevent font loading shifts */
+html {
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 6. Image/SVG stability */
+img, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 7. Motion animations - transform only */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* 8. Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 9. Prevent margin collapse */
+.section-wrapper {
+  padding-top: 0.1px;
+  padding-bottom: 0.1px;
+}
+
+/* 10. Strategic partners section stability */
+#strategic-partners {
+  position: relative;
+  z-index: 1;
+}
