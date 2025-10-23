@@ -1,0 +1,8 @@
+.env.local
+.env
+node_modules/
+.next/
+.netlify/
+.vercel/
+airweave-kb-ui/
+*.log
